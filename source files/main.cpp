@@ -3,8 +3,8 @@
 #include <GLFW/glfw3.h>
 
 // Declare some constant values.
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1000
+#define HEIGHT 700
 #define WINDOW_NAME "Storm of Lights"
 
 using namespace std;
@@ -26,12 +26,20 @@ int main (void) {
     }
     glfwMakeContextCurrent(window);
 
+    // Load glad
+    gladLoadGL();
+    glViewport(0, 0, WIDTH, HEIGHT);
+
+    // Colour is represented by normalized floats RED, GREEN, BLUE where ALPHA represents the transparency.
+    // ALPHA: 1.0 {opaque}, 0.0 {completely transparent}
+    glClearColor(0.04f, 0.24f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Swap the front and back buffers to paint the colours from the back buffer onto the visable front one.
+    glfwSwapBuffers(window);
+
     // Create the main game loop
-    bool RUNNING {true};
-    while (RUNNING) {
-        if (glfwWindowShouldClose(window)) {
-            RUNNING = false;
-        }
+    while (!glfwWindowShouldClose(window)) {
 
         // Process pooled events
         glfwPollEvents();
