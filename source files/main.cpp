@@ -15,24 +15,30 @@ int main (void) {
     // Boilerplate version checking after initialization.
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
+    // Inform GLFW we want to use the CORE profile which contains only the modern functions.
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Create the window.
+    // Create the window with error checking.
     GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_NAME, NULL, NULL);
     if (window == NULL) {
         cerr << "Failed to create OpenGL window..." << endl;
         glfwTerminate();
         return -1;
     }
+
+    // Load the window we just created into the current context.
     glfwMakeContextCurrent(window);
 
     // Load glad
     gladLoadGL();
+
+    // Specify the viewport of OpenGL (x = 0, y = 0 to x=WIDTH, y=HEIGHT)
     glViewport(0, 0, WIDTH, HEIGHT);
 
     // Colour is represented by normalized floats RED, GREEN, BLUE where ALPHA represents the transparency.
     // ALPHA: 1.0 {opaque}, 0.0 {completely transparent}
-    glClearColor(0.04f, 0.24f, 0.5f, 1.0f);
+    glClearColor(0.14f, 0.23f, 0.14f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Swap the front and back buffers to paint the colours from the back buffer onto the visable front one.
@@ -49,4 +55,4 @@ int main (void) {
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
-}
+}   
