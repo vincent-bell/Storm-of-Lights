@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+# MSVC
+.vs
+x64/Debug/
+Storm\ of\ Lights.sln
+Storm\ of\ Lights.vcxproj
+Storm\ of\ Lights.vcxproj.filters
+Storm\ of\ Lights.vcxproj.user
+
+# OpenGL
+source\ files/glad.c
