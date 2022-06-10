@@ -9,7 +9,7 @@
 
 using namespace std;
 
-// Define shader source code here
+// Define shader source code.
 const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "void main (void) {\n"
@@ -35,9 +35,9 @@ int main (void) {
 
     // Define the vertices for drawing an equilateral triangle.
     GLfloat vertices[] = {
-        -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-        0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f
+        -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+        0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Top corner
     };
 
 
@@ -60,11 +60,12 @@ int main (void) {
     glViewport(0, 0, WIDTH, HEIGHT);
 
 
-    // Initialize shader objects
+    // Create vertex shader object, attach source code and compile to machine code.
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
+    // Create fragment shader object, attach source code and compile to machine code.
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
@@ -80,20 +81,26 @@ int main (void) {
     glDeleteShader(fragmentShader);
 
 
-    // I have no idea...
-    // Something about creating a buffer for CPU-GPU comms to reduce number of times we request due to slow send/recieve?
+    // Create reference containers for vertex array object and vertex buffer object.
     GLuint VAO, VBO;
+
+    // Generate the vertex array object and vertex buffer object with only 1 object each. (order is important)
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
+    // Make VAO the current vertex array object.
     glBindVertexArray(VAO);
 
+    // Bind VBO specifying it's a GL_ARRAY_BUFFER and then introduce the vertices into the VBO.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
+
+    // Configure the vertex attribute so OpenGL knows how to read our VBO.
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Enable the vertex attribute so that OpenGL knows it should use it.
     glEnableVertexAttribArray(0);
 
+    // Bind both VBO and VAO to 0 so we don't accidently modify them?
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
@@ -119,6 +126,7 @@ int main (void) {
         glfwPollEvents();
     }
 
+    // Delete the objects we created once we exit the main loop.
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
